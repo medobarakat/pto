@@ -5,7 +5,7 @@ import CardBody from "components/Card/CardBody";
 import CardFooter from "components/Card/CardFooter";
 // *** Icons ***
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Modal, Stack, Typography } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -21,6 +21,18 @@ const dateValidation = Yup.date()
   .typeError("Invalid Date.")
   .required("Required Field");
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const JobsReport = () => {
   const initialValues = { fromDate: initialDate, toDate: initialDate };
   const validationSchema = Yup.object({
@@ -29,7 +41,9 @@ const JobsReport = () => {
   });
   const formikRef = useRef(null);
   const [loading, setLoading] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   function downloadPdfFromByteArray(byteArray) {
     const blob = new Blob([byteArray], { type: "application/pdf" });
 
@@ -37,7 +51,7 @@ const JobsReport = () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "audit_report.pdf";
+    a.download = "jobs_report.pdf";
 
     // Simulate a click event on the anchor to trigger the download
     a.style.display = "none";
@@ -64,7 +78,11 @@ const JobsReport = () => {
         responseType: "arraybuffer",
       });
 
-      downloadPdfFromByteArray(response.data);
+      if (!response) {
+        handleOpen();
+      } else {
+        downloadPdfFromByteArray(response.data);
+      }
     } catch (error) {
       // Handle error
     } finally {
@@ -98,6 +116,21 @@ const JobsReport = () => {
 
   return (
     <Card style={{ marginTop: 100 }}>
+       <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Warning ..
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            There Is No Data To View In This Date Range
+          </Typography>
+        </Box>
+      </Modal>
       <div className="card-icon-wrapper">
         <CardIcon color="primary">
           <AssignmentIcon sx={{ color: "#fff" }} />
@@ -117,7 +150,7 @@ const JobsReport = () => {
                   {({ field, form }) => (
                     <Datepicker
                       id="fromDate"
-                      labelText="Date From"
+                      labelText="From Date"
                       fullWidth
                       onDateChange={() => console.log("changed")}
                       error={Boolean(
@@ -138,7 +171,7 @@ const JobsReport = () => {
                   {({ field, form }) => (
                     <Datepicker
                       id="toDate"
-                      labelText="Date To"
+                      labelText="To Date"
                       fullWidth
                       onDateChange={() => console.log("changed")}
                       error={Boolean(form.touched.toDate && form.errors.toDate)}
@@ -159,7 +192,7 @@ const JobsReport = () => {
               >
                 <Button sx={{ width: "20%" }} type="submit" variant="contained">
                   <span>
-                    {loading ? <Spinner size={17} /> : "Create Audit Report"}
+                    {loading ? <Spinner size={17} /> : "Create Jobs Report"}
                   </span>
                 </Button>
               </Stack>
