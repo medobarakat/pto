@@ -37,7 +37,7 @@ const JobsReport = () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Jobs_Report.pdf";
+    a.download = "audit_report.pdf";
     a.style.display = "none";
     document.body.appendChild(a);
     a.click();
@@ -59,10 +59,13 @@ const JobsReport = () => {
     axios
       .post("/api/jobsReport", body, { headers, responseType: "arraybuffer" })
       .then((response) => {
-        if (String(response?.data?.statusCode) === "200") {
-          setLoading(false);
-          downloadPdfFromByteArray(response?.data)
-        }
+
+        console.log(response);
+        downloadPdfFromByteArray(response);
+        setLoading(false);
+
+
+    
       })
       .catch((error) => {
         setLoading(false);
