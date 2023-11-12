@@ -45,7 +45,6 @@ const AuditReport = () => {
   }
 
   const onSubmit = ({ fromDate, toDate }) => {
-
     const headers = { "Content-type": "application/json" };
     const body = {
       fromDate: moment(fromDate).format("YYYY-MM-DD"),
@@ -55,16 +54,36 @@ const AuditReport = () => {
     axios
       .post("/api/auditReport", body, { headers, responseType: "arraybuffer" })
       .then((response) => {
-        if (String(response?.data?.statusCode) === "200") {
-          setLoading(false);
-          downloadPdfFromByteArray(response?.data)
-        }
+        console.log(response);
+        downloadPdfFromByteArray(response);
+        setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
         // Handle error
       });
   };
+
+  // const onSubmit = ({ fromDate, toDate }) => {
+
+  //   const headers = { "Content-type": "application/pdf" };
+  //   const body = {
+  //     fromDate: moment(fromDate).format("YYYY-MM-DD"),
+  //     toDate: moment(toDate).format("YYYY-MM-DD"),
+  //   };
+
+  //   axios
+  //     .post("http://44.211.194.102:8084/auditReport", body, { headers, responseType: "arraybuffer" })
+  //     .then((response) => {
+  //       console.log(response)
+  //       downloadPdfFromByteArray(response)
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setLoading(false);
+  //       // Handle error
+  //     });
+  // };
 
   return (
     <Card style={{ marginTop: 100 }}>
