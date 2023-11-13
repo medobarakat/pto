@@ -78,18 +78,36 @@ const AuditReport = () => {
         headers,
         responseType: "arraybuffer",
       });
-
-      if (!response) {
-        handleOpen();
-      } else {
-        downloadPdfFromByteArray(response.data);
-      }
-    } catch (error) {
-      // Handle error
-    } finally {
       setLoading(false);
+      downloadPdfFromByteArray(response.data);
+    } catch (error) {
+      handleOpen();
+      setLoading(false);
+      // Handle error
     }
   };
+
+  // const onSubmit = async ({ fromDate, toDate }) => {
+  //   setLoading(true);
+
+  //   const headers = { "Content-type": "application/json" };
+  //   const body = {
+  //     fromDate: moment(fromDate).format("YYYY-MM-DD"),
+  //     toDate: moment(toDate).format("YYYY-MM-DD"),
+  //   };
+
+  //   try {
+  //     const response = await axios.post("/api/auditReport", body, {
+  //       headers,
+  //       responseType: "arraybuffer",
+  //     });
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setLoading(false);
+  //     handleOpen();
+  //   }
+  // };
 
   // const onSubmit = async ({ fromDate, toDate }) => {
   //   setLoading(true);
@@ -106,15 +124,11 @@ const AuditReport = () => {
   //       body,
   //       { headers, responseType: "arraybuffer" }
   //     );
-  //     if (!response) {
-  //       handleOpen();
-  //     } else {
-  //       downloadPdfFromByteArray(response.data);
-  //     }
-  //   } catch (error) {
-  //     // Handle error
-  //   } finally {
   //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setLoading(false);
+  //     handleOpen();
   //   }
   // };
 
