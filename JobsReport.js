@@ -77,15 +77,11 @@ const JobsReport = () => {
         headers,
         responseType: "arraybuffer",
       });
-
-      if (!response) {
-        handleOpen();
-      } else {
-        downloadPdfFromByteArray(response.data);
-      }
+      setLoading(false);
+      downloadPdfFromByteArray(response.data);
+     
     } catch (error) {
-      // Handle error
-    } finally {
+      handleOpen();
       setLoading(false);
     }
   };
