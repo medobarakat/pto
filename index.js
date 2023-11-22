@@ -21,6 +21,7 @@ function CustomDropdown({
   maxWidth,
   onChange,
   dynamicItem,
+  name
 }) {
   const systemTheme = useTheme();
   const theme = createTheme(ThemeOverrides(systemTheme));
@@ -35,6 +36,7 @@ function CustomDropdown({
           variant={variant}
           label={label && label}
           value={value}
+          name={name}
           onChange={onChange}
           className={classNames(classes.select, {
             [classes.standardSelect]: variant === "standard",
@@ -44,9 +46,9 @@ function CustomDropdown({
           }}
         >
           {dynamicItem
-            ? items.map((item) => (
+            ? items.map((item,index) => (
                 <MenuItem
-                  key={item}
+                  key={item+index}
                   className={classes.selectMenuItem}
                   value={item}
                   title={item}
@@ -95,7 +97,7 @@ CustomDropdown.defaultProps = {
 CustomDropdown.propTypes = {
   id: propTypes.oneOfType([propTypes.string, propTypes.number]),
   variant: propTypes.oneOf(["filled", "outlined", "standard"]),
-  items: propTypes.arrayOf(propTypes.object).isRequired,
+  // items: propTypes.arrayOf(propTypes.object).isRequired,
   value: propTypes.string,
   onChange: propTypes.func,
 };
