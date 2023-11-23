@@ -21,7 +21,8 @@ function CustomDropdown({
   maxWidth,
   onChange,
   dynamicItem,
-  name
+  name,
+  required,
 }) {
   const systemTheme = useTheme();
   const theme = createTheme(ThemeOverrides(systemTheme));
@@ -30,7 +31,11 @@ function CustomDropdown({
   return (
     <FormControl className={classes.formControl} fullWidth>
       <ThemeProvider theme={theme}>
-        {label && <InputLabel id={`${id}--label`}>{label}</InputLabel>}
+        {required ? (
+          <>{label && <InputLabel id={`${id}--label`}>{label} *</InputLabel>}</>
+        ) : (
+          <>{label && <InputLabel id={`${id}--label`}>{label}</InputLabel>}</>
+        )}
         <Select
           id={id}
           variant={variant}
@@ -44,11 +49,12 @@ function CustomDropdown({
           MenuProps={{
             sx: { maxWidth: maxWidth },
           }}
+          required={required}
         >
           {dynamicItem
-            ? items.map((item,index) => (
+            ? items.map((item, index) => (
                 <MenuItem
-                  key={item+index}
+                  key={item + index}
                   className={classes.selectMenuItem}
                   value={item}
                   title={item}
