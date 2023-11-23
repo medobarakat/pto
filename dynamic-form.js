@@ -119,21 +119,22 @@ const DynamicForm = React.forwardRef(
                       if (choices && type === "text") {
                         return (
                           <Grid key={`grid-${name}`} item md={6}>
-                            <Field name={name}>
-                              {({ field, form, meta }) => {
+                            <Field name={id}>
+                              {({ field, form,  meta: { touched, error }, }) => {
                                 const handleChange = (e) => {
-                                  form.setFieldValue(name, e.target.value);
+                                  form.setFieldValue(id, e.target.value);
                                 };
                                 return (
                                   <CustomDropdown
-                                    id={id}
-                                    label={name}
-                                    name={name}
-                                    items={choices}
-                                    dynamicItem={true}
-                                    value={field.value || value}
-                                    onChange={handleChange}
-                                  />
+                                  id={id}
+                                  label={name}
+                                  name={id}
+                                  items={choices}
+                                  required={required}
+                                  dynamicItem={true}
+                                  value={field.value || value}
+                                  onChange={handleChange}
+                                />
                                 );
                               }}
                             </Field>
